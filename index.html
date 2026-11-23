@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deccan Spice & Grill | Artisanal Indian Fine-Casual Dining</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display for Editorial Elegance & Inter for Clean Readability -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Crisp Culinary & UI Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        saffron: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                        },
+                        terracotta: {
+                            500: '#e05a36',
+                            600: '#c84422',
+                            700: '#a53317',
+                        },
+                        charcoal: {
+                            800: '#262322',
+                            900: '#1a1716',
+                            950: '#12100f',
+                        },
+                        sand: {
+                            50: '#fdfbf7',
+                            100: '#f7f2e9',
+                            200: '#ede3d2',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-sand-50 text-charcoal-900 font-sans antialiased selection:bg-saffron-500 selection:text-white overflow-x-hidden">
+
+    <!-- Toast Notification Container (Replaces alert() for sleek UX) -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- 1. STICKY NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-charcoal-950/95 backdrop-blur-md text-sand-50 border-b border-white/10 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-saffron-500 to-terracotta-600 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                        <!-- Custom Inline SVG Flame/Spice Motif -->
+                        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-white block leading-none">Deccan Spice <span class="text-saffron-400">&</span> Grill</span>
+                        <span class="text-[11px] uppercase tracking-[0.2em] text-sand-200/70">Heritage Kitchen • Est. 2018</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#menu" class="text-sm font-medium text-sand-100 hover:text-saffron-400 transition-colors">Menu</a>
+                    <a href="#offers" class="text-sm font-medium text-sand-100 hover:text-saffron-400 transition-colors">Special Offers</a>
+                    <a href="#reviews" class="text-sm font-medium text-sand-100 hover:text-saffron-400 transition-colors">Reviews</a>
+                    <a href="#visit" class="text-sm font-medium text-sand-100 hover:text-saffron-400 transition-colors">Visit Us</a>
+                </nav>
+
+                <!-- Action Buttons: Tray & Reserve Table -->
+                <div class="flex items-center gap-3">
+                    <!-- Order Tray Button -->
+                    <button onclick="toggleCartDrawer()" aria-label="View Order Tray" class="relative p-3 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-sand-50 border border-white/10 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-bag-shopping text-saffron-400"></i>
+                        <span class="hidden sm:inline text-sm font-medium">Tray</span>
+                        <span id="cart-badge" class="bg-terracotta-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+                    </button>
+
+                    <!-- Reserve Table CTA -->
+                    <button onclick="openReservationModal()" class="px-4 sm:px-5 py-3 rounded-xl bg-gradient-to-r from-saffron-500 to-terracotta-600 hover:from-saffron-400 hover:to-terracotta-500 text-white font-semibold text-sm shadow-lg shadow-terracotta-600/20 transition-all transform hover:-translate-y-0.5">
+                        Reserve Table
+                    </button>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-3 rounded-xl bg-charcoal-800 text-sand-50 hover:text-saffron-400">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-charcoal-900 border-t border-white/10 px-4 pt-3 pb-5 space-y-2">
+            <a href="#menu" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-base font-medium text-sand-100 hover:bg-charcoal-800 hover:text-saffron-400">Explore Menu</a>
+            <a href="#offers" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-base font-medium text-sand-100 hover:bg-charcoal-800 hover:text-saffron-400">Special Offers</a>
+            <a href="#reviews" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-base font-medium text-sand-100 hover:bg-charcoal-800 hover:text-saffron-400">Guest Reviews</a>
+            <a href="#visit" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-base font-medium text-sand-100 hover:bg-charcoal-800 hover:text-saffron-400">Visit Us & Contact</a>
+        </div>
+    </header>
+
+    <!-- 2. HERO SECTION -->
+    <section class="relative bg-charcoal-950 text-sand-50 overflow-hidden">
+        <!-- Decorative Background Mandala SVG & Warm Radial Gradients -->
+        <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div class="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-terracotta-600/20 blur-3xl"></div>
+            <div class="absolute -bottom-32 -left-32 w-[450px] h-[450px] rounded-full bg-saffron-500/15 blur-3xl"></div>
+            <!-- Geometric Deccan Mandala SVG Watermark -->
+            <svg class="absolute right-[-10%] top-1/2 -translate-y-1/2 w-[650px] h-[650px] text-saffron-500/[0.06]" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.6">
+                <circle cx="100" cy="100" r="90" />
+                <circle cx="100" cy="100" r="70" stroke-dasharray="4 4" />
+                <circle cx="100" cy="100" r="50" />
+                <polygon points="100,10 190,100 100,190 10,100" />
+                <polygon points="36,36 164,36 164,164 36,164" />
+                <circle cx="100" cy="100" r="25" />
+            </svg>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Column: Editorial Headline & CTAs -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-saffron-500/30 text-saffron-400 text-xs sm:text-sm font-medium tracking-wide">
+                        <span class="w-2 h-2 rounded-full bg-saffron-400 animate-pulse"></span>
+                        Charcoal-Fired Kebabs & Authentic Deccan Dum Biryanis
+                    </div>
+
+                    <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white">
+                        Where Royal <span class="text-transparent bg-clip-text bg-gradient-to-r from-saffron-400 via-saffron-500 to-terracotta-500">Deccan Spices</span> Meet Live Charcoal Embers
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-sand-200/85 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Experience stone-ground heirloom masalas, slow-simmered gravies, and melt-in-the-mouth clay oven grills crafted fresh every evening in the heart of Banjara Hills & Vijayawada.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#menu" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-saffron-500 to-terracotta-600 hover:from-saffron-400 hover:to-terracotta-500 text-white font-semibold text-base shadow-xl shadow-terracotta-600/25 transition-all flex items-center justify-center gap-2">
+                            <span>Explore Menu</span>
+                            <i class="fa-solid fa-arrow-down text-sm"></i>
+                        </a>
+                        <button onclick="openReservationModal()" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white border border-white/15 font-semibold text-base transition-all flex items-center justify-center gap-2">
+                            <i class="fa-regular fa-calendar-check text-saffron-400"></i>
+                            <span>Reserve a Table</span>
+                        </button>
+                    </div>
+
+                    <!-- Trust & Local Highlights Bar -->
+                    <div class="pt-6 grid grid-cols-3 gap-4 border-t border-white/10 max-w-lg mx-auto lg:mx-0">
+                        <div>
+                            <p class="text-xl sm:text-2xl font-serif font-bold text-saffron-400">4.8 ★</p>
+                            <p class="text-xs text-sand-200/70">2,400+ Google Reviews</p>
+                        </div>
+                        <div>
+                            <p class="text-xl sm:text-2xl font-serif font-bold text-white">100%</p>
+                            <p class="text-xs text-sand-200/70">Stone-Ground Spices</p>
+                        </div>
+                        <div>
+                            <p class="text-xl sm:text-2xl font-serif font-bold text-terracotta-500">Halal</p>
+                            <p class="text-xs text-sand-200/70">& Separate Veg Kitchen</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Visual Thali / Copper Handi Showcase Card -->
+                <div class="lg:col-span-5">
+                    <div class="relative mx-auto max-w-md">
+                        <div class="rounded-3xl bg-gradient-to-b from-charcoal-800 to-charcoal-900 p-6 sm:p-8 border border-saffron-500/25 shadow-2xl relative overflow-hidden">
+                            <!-- Illustrated Culinary SVG Composition -->
+                            <div class="aspect-square rounded-2xl bg-charcoal-950/90 border border-white/5 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+                                <!-- Ambient Glow -->
+                                <div class="w-48 h-48 rounded-full bg-saffron-500/20 blur-2xl absolute"></div>
+                                
+                                <!-- Custom Copper Handi & Steam SVG -->
+                                <svg class="w-48 h-48 relative z-10 drop-shadow-xl" viewBox="0 0 200 200" fill="none">
+                                    <!-- Rising Saffron Steam -->
+                                    <path d="M75 62 C70 50, 82 42, 76 30" stroke="#fbbf24" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                                    <path d="M100 56 C95 42, 108 34, 102 20" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round"/>
+                                    <path d="M125 62 C120 50, 132 42, 126 30" stroke="#fbbf24" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                                    <!-- Brass Lid -->
+                                    <path d="M55 82 Q100 64 145 82 Z" fill="#d97706"/>
+                                    <circle cx="100" cy="68" r="6" fill="#fbbf24"/>
+                                    <!-- Handi Rim -->
+                                    <rect x="48" y="82" width="104" height="10" rx="5" fill="#f59e0b"/>
+                                    <!-- Copper Handi Body -->
+                                    <path d="M54 92 C42 128, 58 164, 100 164 C142 164, 158 128, 146 92 Z" fill="url(#copperGrad)"/>
+                                    <!-- Decorative Hammered Motif -->
+                                    <path d="M56 118 Q100 130 144 118" stroke="#fef3c7" stroke-width="2" stroke-dasharray="4 4" opacity="0.6"/>
+                                    <!-- Glowing Charcoal Embers Below -->
+                                    <ellipse cx="100" cy="174" rx="46" ry="7" fill="#e05a36" opacity="0.7"/>
+                                    <defs>
+                                        <linearGradient id="copperGrad" x1="50" y1="92" x2="150" y2="164" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#e05a36"/>
+                                            <stop offset="0.5" stop-color="#b45309"/>
+                                            <stop offset="1" stop-color="#78350f"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+
+                                <div class="mt-3 text-center relative z-10">
+                                    <span class="text-xs uppercase tracking-widest text-saffron-400 font-semibold">Chef's Signature</span>
+                                    <h3 class="font-serif text-xl font-bold text-white mt-0.5">Nizam's Zafrani Dum Biryani</h3>
+                                    <p class="text-xs text-sand-200/75 mt-1">Aged basmati, Kashmir saffron, caramelized shallots & smoked mirchi ka salan</p>
+                                </div>
+                            </div>
+
+                            <!-- Floating Price & Quick Add Badge -->
+                            <div class="mt-5 flex items-center justify-between bg-charcoal-950/80 px-4 py-3 rounded-2xl border border-white/10">
+                                <div>
+                                    <span class="text-xs text-sand-200/60 block">Signature Handi (Serves 2)</span>
+                                    <span class="text-lg font-bold text-saffron-400">₹549</span>
+                                </div>
+                                <button onclick="addToCartById(9)" class="px-4 py-2.5 rounded-xl bg-terracotta-600 hover:bg-terracotta-500 text-white text-xs font-semibold transition-colors flex items-center gap-1.5">
+                                    <i class="fa-solid fa-plus"></i> Add to Tray
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. INTERACTIVE FOOD MENU SECTION -->
+    <section id="menu" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta-600">Curated Culinary Craft</span>
+            <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal-900 mt-2">Our Signature Menu</h2>
+            <p class="text-charcoal-800/75 mt-3 text-sm sm:text-base">
+                Every dish is prepared to order using cold-pressed oils, farm-fresh produce, and authentic Indian spices. Toggle filters below or build your dining tray.
+            </p>
+        </div>
+
+        <!-- Filter Controls: Category Tabs + Veg-Only Switch -->
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-4 mb-10 bg-white p-3 sm:p-4 rounded-2xl shadow-sm border border-sand-200">
+            <!-- Category Pills -->
+            <div id="category-tabs" class="flex flex-wrap items-center justify-center gap-2 w-full lg:w-auto">
+                <button data-category="All" class="category-btn active px-4 py-2.5 rounded-xl text-sm font-semibold bg-charcoal-900 text-white transition-all">All Dishes</button>
+                <button data-category="Starters" class="category-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-sand-100 text-charcoal-800 hover:bg-sand-200 transition-all">Starters</button>
+                <button data-category="Main Course" class="category-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-sand-100 text-charcoal-800 hover:bg-sand-200 transition-all">Main Course</button>
+                <button data-category="Biryani & Breads" class="category-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-sand-100 text-charcoal-800 hover:bg-sand-200 transition-all">Biryani & Breads</button>
+                <button data-category="Desserts & Beverages" class="category-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-sand-100 text-charcoal-800 hover:bg-sand-200 transition-all">Desserts & Beverages</button>
+            </div>
+
+            <!-- Pure Veg Filter & Search Input -->
+            <div class="flex items-center gap-3 w-full lg:w-auto justify-between sm:justify-end">
+                <label class="inline-flex items-center gap-2.5 cursor-pointer bg-sand-50 px-3.5 py-2 rounded-xl border border-sand-200 select-none">
+                    <input type="checkbox" id="veg-only-toggle" class="sr-only peer" onchange="renderMenu()">
+                    <div class="w-9 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all relative peer-checked:bg-emerald-600"></div>
+                    <span class="text-xs sm:text-sm font-semibold text-charcoal-800 flex items-center gap-1.5">
+                        <span class="w-3.5 h-3.5 border border-emerald-600 flex items-center justify-center rounded-sm">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        </span>
+                        Pure Veg Only
+                    </span>
+                </label>
+
+                <div class="relative flex-1 sm:w-52">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                    <input type="text" id="menu-search" oninput="renderMenu()" placeholder="Search dish..." class="w-full pl-9 pr-3 py-2 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Grid Container -->
+        <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamically populated via JavaScript -->
+        </div>
+    </section>
+
+    <!-- 4. SPECIAL OFFERS & PROMO CODES SECTION -->
+    <section id="offers" class="py-16 sm:py-24 bg-charcoal-950 text-sand-50 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-[0.2em] text-saffron-400">Royal Feasts & Privileges</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mt-2">Curated Dining Offers</h2>
+                </div>
+                <p class="text-sand-200/75 text-sm max-w-md">
+                    Tap any promo code below to copy it instantly and apply it in your Order Tray or mention it when dining in.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Offer Card 1: Weekday Royal Lunch Thali -->
+                <div class="rounded-3xl bg-gradient-to-br from-charcoal-800 to-charcoal-900 border border-saffron-500/25 p-7 flex flex-col justify-between shadow-xl hover:border-saffron-500/50 transition-all">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-saffron-500/20 text-saffron-400 text-xs font-bold uppercase tracking-wider">Mon – Fri • 12 PM – 3:30 PM</span>
+                            <i class="fa-solid fa-utensils text-saffron-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-white">Deccan Executive Lunch Thali</h3>
+                        <p class="text-sand-200/80 text-sm mt-2 leading-relaxed">
+                            Unlimited heirloom dal, two seasonal curries, tandoori roti basket, fragrant jeera rice, papad, pickle & gulab jamun.
+                        </p>
+                        <div class="mt-4 flex items-baseline gap-2">
+                            <span class="text-2xl font-bold text-saffron-400">₹349</span>
+                            <span class="text-sm text-sand-200/50 line-through">₹499</span>
+                            <span class="text-xs text-emerald-400 font-semibold">(Veg) • ₹429 (Non-Veg)</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-5 border-t border-white/10 flex items-center justify-between gap-3">
+                        <div class="bg-charcoal-950 px-3.5 py-2 rounded-xl border border-dashed border-saffron-500/50 font-mono text-sm font-bold text-saffron-300 tracking-wider">
+                            THALI349
+                        </div>
+                        <button onclick="copyPromoCode('THALI349', this)" class="px-4 py-2.5 rounded-xl bg-saffron-500 hover:bg-saffron-400 text-charcoal-950 font-bold text-xs transition-all flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> <span>Copy Code</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Offer Card 2: Festive Family Feast Combo -->
+                <div class="rounded-3xl bg-gradient-to-br from-terracotta-700/90 to-charcoal-900 border border-terracotta-500/40 p-7 flex flex-col justify-between shadow-xl relative overflow-hidden">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-saffron-400/10 blur-xl"></div>
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold uppercase tracking-wider">Best Seller • Serves 4</span>
+                            <i class="fa-solid fa-fire-flame-curved text-saffron-300 text-xl"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-white">Nizam's Grand Family Dastarkhwan</h3>
+                        <p class="text-sand-100/85 text-sm mt-2 leading-relaxed">
+                            1 Full Kebab Platter (12 pcs) + 2 Signature Curries + 6 Assorted Naans + 1 Family Handi Biryani + 4 Double Ka Meetha.
+                        </p>
+                        <div class="mt-4 flex items-baseline gap-2">
+                            <span class="text-2xl font-bold text-white">₹1,699</span>
+                            <span class="text-sm text-sand-200/60 line-through">₹2,250</span>
+                            <span class="text-xs bg-white/20 text-white px-2 py-0.5 rounded-md font-semibold">Save ₹551</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-5 border-t border-white/15 flex items-center justify-between gap-3">
+                        <div class="bg-charcoal-950/80 px-3.5 py-2 rounded-xl border border-dashed border-white/40 font-mono text-sm font-bold text-white tracking-wider">
+                            FEAST550
+                        </div>
+                        <button onclick="copyPromoCode('FEAST550', this)" class="px-4 py-2.5 rounded-xl bg-white hover:bg-sand-100 text-charcoal-950 font-bold text-xs transition-all flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> <span>Copy Code</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Offer Card 3: First Direct Order Privilege -->
+                <div class="rounded-3xl bg-gradient-to-br from-charcoal-800 to-charcoal-900 border border-saffron-500/25 p-7 flex flex-col justify-between shadow-xl hover:border-saffron-500/50 transition-all">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider">Direct Website Exclusive</span>
+                            <i class="fa-solid fa-gift text-saffron-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-white">Flat 20% Off First Direct Order</h3>
+                        <p class="text-sand-200/80 text-sm mt-2 leading-relaxed">
+                            Skip aggregator markups! Enjoy flat 20% off (up to ₹250) plus complimentary Masala Chaas on direct takeaway or table orders above ₹699.
+                        </p>
+                        <div class="mt-4 flex items-baseline gap-2">
+                            <span class="text-2xl font-bold text-saffron-400">20% OFF</span>
+                            <span class="text-xs text-sand-200/70">Min. tray value ₹699</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-5 border-t border-white/10 flex items-center justify-between gap-3">
+                        <div class="bg-charcoal-950 px-3.5 py-2 rounded-xl border border-dashed border-saffron-500/50 font-mono text-sm font-bold text-saffron-300 tracking-wider">
+                            DECCAN20
+                        </div>
+                        <button onclick="copyPromoCode('DECCAN20', this)" class="px-4 py-2.5 rounded-xl bg-saffron-500 hover:bg-saffron-400 text-charcoal-950 font-bold text-xs transition-all flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> <span>Copy Code</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CUSTOMER REVIEWS & INTERACTIVE FEEDBACK SECTION -->
+    <section id="reviews" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta-600">Guest Stories</span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-charcoal-900 mt-2">Loved by Spice Connoisseurs</h2>
+            <p class="text-charcoal-800/75 mt-2 text-sm sm:text-base">
+                Read verified dining experiences from our guests across Hyderabad & Vijayawada, or share your own culinary memory.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Left 8 Cols: Verified Reviews Grid -->
+            <div id="reviews-list" class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <!-- Right 4 Cols: Leave a Review Interactive Card -->
+            <div class="lg:col-span-4 bg-white rounded-3xl p-6 sm:p-7 border border-sand-200 shadow-lg sticky top-24">
+                <h3 class="font-serif text-2xl font-bold text-charcoal-900">Share Your Experience</h3>
+                <p class="text-xs text-charcoal-800/70 mt-1 mb-5">Dined with us recently? Rate your meal and see your review appear live.</p>
+
+                <form id="review-form" onsubmit="handleReviewSubmit(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Your Name</label>
+                        <input type="text" id="reviewer-name" required placeholder="e.g., Ananya Rao" class="w-full px-4 py-2.5 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Favourite Dish Ordered</label>
+                        <input type="text" id="reviewer-dish" required placeholder="e.g., Tandoori Paneer Tikka" class="w-full px-4 py-2.5 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Star Rating</label>
+                        <div id="star-selector" class="flex items-center gap-2 text-2xl text-saffron-400 cursor-pointer">
+                            <button type="button" onclick="setRating(1)" class="star-btn focus:outline-none hover:scale-110 transition-transform" data-star="1">★</button>
+                            <button type="button" onclick="setRating(2)" class="star-btn focus:outline-none hover:scale-110 transition-transform" data-star="2">★</button>
+                            <button type="button" onclick="setRating(3)" class="star-btn focus:outline-none hover:scale-110 transition-transform" data-star="3">★</button>
+                            <button type="button" onclick="setRating(4)" class="star-btn focus:outline-none hover:scale-110 transition-transform" data-star="4">★</button>
+                            <button type="button" onclick="setRating(5)" class="star-btn focus:outline-none hover:scale-110 transition-transform" data-star="5">★</button>
+                        </div>
+                        <input type="hidden" id="reviewer-rating" value="5">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Your Review</label>
+                        <textarea id="reviewer-comment" rows="3" required placeholder="Tell us about the flavours, ambience, and hospitality..." class="w-full px-4 py-2.5 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 rounded-xl bg-charcoal-900 hover:bg-terracotta-600 text-white font-semibold text-sm transition-colors shadow-md">
+                        Post Guest Review
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. VISIT US: LOCATION, HOURS, INTERACTIVE MAP & DIRECT INQUIRY -->
+    <section id="visit" class="py-16 sm:py-24 bg-sand-100 border-t border-sand-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta-600">Hospitality & Directions</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-charcoal-900 mt-2">Visit Deccan Spice & Grill</h2>
+                <p class="text-charcoal-800/75 mt-2 text-sm sm:text-base">
+                    Join us for an intimate family dinner, corporate lunch, or private banquet celebration.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left 6 Cols: Branch Selector, Address, Hours & Styled Interactive Map -->
+                <div class="lg:col-span-6 space-y-6">
+                    <!-- Branch Toggle Tabs -->
+                    <div class="bg-white p-6 rounded-3xl border border-sand-200 shadow-sm">
+                        <div class="flex items-center gap-2 p-1 bg-sand-100 rounded-xl mb-5">
+                            <button onclick="switchBranch('hyderabad')" id="tab-hyderabad" class="flex-1 py-2.5 px-4 rounded-lg text-sm font-bold bg-charcoal-900 text-white transition-all">
+                                Hyderabad (Flagship)
+                            </button>
+                            <button onclick="switchBranch('vijayawada')" id="tab-vijayawada" class="flex-1 py-2.5 px-4 rounded-lg text-sm font-bold text-charcoal-800 hover:text-charcoal-950 transition-all">
+                                Vijayawada (MG Road)
+                            </button>
+                        </div>
+
+                        <div id="branch-details" class="space-y-4">
+                            <!-- Updated dynamically via switchBranch() -->
+                        </div>
+
+                        <!-- Clickable Phone & WhatsApp Action Pills -->
+                        <div class="mt-6 pt-5 border-t border-sand-200 flex flex-wrap gap-3">
+                            <a id="branch-phone-link" href="tel:+914023558899" class="flex-1 min-w-[160px] py-3 px-4 rounded-xl bg-sand-100 hover:bg-sand-200 text-charcoal-900 font-semibold text-sm flex items-center justify-center gap-2 transition-colors">
+                                <i class="fa-solid fa-phone text-terracotta-600"></i>
+                                <span id="branch-phone-text">+91 40 2355 8899</span>
+                            </a>
+                            <a id="branch-whatsapp-link" href="https://wa.me/919849012345?text=Hello%20Deccan%20Spice%20%26%20Grill!%20I%20would%20like%20to%20inquire%20about%20a%20table." target="_blank" rel="noopener noreferrer" class="flex-1 min-w-[160px] py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-colors shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                                <span>WhatsApp Concierge</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Styled Interactive Map Illustration Card -->
+                    <div class="rounded-3xl bg-charcoal-900 text-sand-50 p-5 border border-charcoal-800 shadow-lg relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-saffron-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-location-dot"></i> Interactive Neighbourhood Map
+                            </span>
+                            <span id="map-landmark-badge" class="text-xs bg-white/10 px-2.5 py-1 rounded-lg text-sand-200">Road No. 12, Banjara Hills</span>
+                        </div>
+
+                        <!-- Custom SVG Vector Map with Interactive Pin -->
+                        <div class="relative rounded-2xl bg-charcoal-950 h-56 w-full overflow-hidden border border-white/10 flex items-center justify-center">
+                            <svg class="w-full h-full opacity-40" viewBox="0 0 400 200" fill="none">
+                                <!-- City Grid Roads -->
+                                <path d="M0 40 L400 65" stroke="#fbbf24" stroke-width="2.5"/>
+                                <path d="M0 140 L400 115" stroke="#78716c" stroke-width="2"/>
+                                <path d="M90 0 L120 200" stroke="#78716c" stroke-width="2"/>
+                                <path d="M270 0 L240 200" stroke="#fbbf24" stroke-width="3"/>
+                                <circle cx="255" cy="95" r="38" stroke="#e05a36" stroke-width="1.5" stroke-dasharray="4 4"/>
+                            </svg>
+
+                            <!-- Interactive Map Pin Overlay -->
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                                <div class="w-12 h-12 rounded-full bg-terracotta-600/30 flex items-center justify-center animate-ping absolute"></div>
+                                <div class="w-11 h-11 rounded-full bg-terracotta-600 text-white flex items-center justify-center shadow-lg relative z-10 border-2 border-white">
+                                    <i class="fa-solid fa-utensils text-sm"></i>
+                                </div>
+                                <div class="mt-2 bg-charcoal-900/95 backdrop-blur-md px-4 py-2 rounded-xl border border-saffron-500/30 shadow-xl relative z-10">
+                                    <p id="map-pin-title" class="text-xs font-bold text-white">Deccan Spice & Grill — Banjara Hills</p>
+                                    <p class="text-[11px] text-saffron-400">Valet Parking Available • Wheelchair Accessible</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 6 Cols: Quick Table Reservation / Private Event Form -->
+                <div class="lg:col-span-6 bg-white rounded-3xl p-6 sm:p-8 border border-sand-200 shadow-lg">
+                    <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600">Instant Confirmation</span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-charcoal-900 mt-1">Book a Table or Banquet Inquiry</h3>
+                    <p class="text-sm text-charcoal-800/75 mt-1 mb-6">
+                        Reserve your table in seconds. For groups larger than 12 guests, our banquet manager will call you within 15 minutes.
+                    </p>
+
+                    <form id="inline-booking-form" onsubmit="handleBookingSubmit(event, 'inline')" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Full Name *</label>
+                                <input type="text" name="guestName" required placeholder="Vikramaditya Reddy" class="w-full px-4 py-3 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Mobile Number *</label>
+                                <input type="tel" name="guestPhone" required placeholder="+91 98490 XXXXX" class="w-full px-4 py-3 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Location *</label>
+                                <select name="branch" class="w-full px-3.5 py-3 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                                    <option value="Hyderabad - Banjara Hills">Hyderabad</option>
+                                    <option value="Vijayawada - MG Road">Vijayawada</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Date *</label>
+                                <input type="date" name="date" required class="booking-date-input w-full px-3.5 py-3 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Guests *</label>
+                                <select name="guests" class="w-full px-3.5 py-3 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                                    <option value="2 Guests">2 Guests</option>
+                                    <option value="4 Guests" selected>4 Guests</option>
+                                    <option value="6 Guests">6 Guests</option>
+                                    <option value="8+ Family Table">8+ Family Table</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Preferred Time Slot *</label>
+                            <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="timeSlot" value="1:00 PM" class="peer sr-only">
+                                    <span class="block text-center py-2 px-2 rounded-xl border border-sand-200 bg-sand-50 text-xs font-semibold peer-checked:bg-charcoal-900 peer-checked:text-white peer-checked:border-charcoal-900 transition-all">1:00 PM</span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="timeSlot" value="7:30 PM" checked class="peer sr-only">
+                                    <span class="block text-center py-2 px-2 rounded-xl border border-sand-200 bg-sand-50 text-xs font-semibold peer-checked:bg-charcoal-900 peer-checked:text-white peer-checked:border-charcoal-900 transition-all">7:30 PM</span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="timeSlot" value="8:30 PM" class="peer sr-only">
+                                    <span class="block text-center py-2 px-2 rounded-xl border border-sand-200 bg-sand-50 text-xs font-semibold peer-checked:bg-charcoal-900 peer-checked:text-white peer-checked:border-charcoal-900 transition-all">8:30 PM</span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="timeSlot" value="9:30 PM" class="peer sr-only">
+                                    <span class="block text-center py-2 px-2 rounded-xl border border-sand-200 bg-sand-50 text-xs font-semibold peer-checked:bg-charcoal-900 peer-checked:text-white peer-checked:border-charcoal-900 transition-all">9:30 PM</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1.5">Special Requests (Optional)</label>
+                            <input type="text" name="notes" placeholder="e.g., Birthday celebration, high chair needed, Jain food preference..." class="w-full px-4 py-3 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                        </div>
+
+                        <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-saffron-500 to-terracotta-600 hover:from-saffron-400 hover:to-terracotta-500 text-white font-bold text-sm shadow-lg shadow-terracotta-600/20 transition-all">
+                            Confirm Table Reservation
+                        </button>
+                    </form>
+
+                    <!-- Inline Confirmation Banner (Hidden until submitted) -->
+                    <div id="inline-booking-confirmation" class="hidden mt-5 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                                <i class="fa-solid fa-check text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-base">Table Reserved!</h4>
+                                <p id="inline-confirmation-text" class="text-xs sm:text-sm text-emerald-800 mt-1 leading-relaxed"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-charcoal-950 text-sand-200/75 py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <span class="font-serif text-xl font-bold text-white">Deccan Spice <span class="text-saffron-400">&</span> Grill</span>
+                <p class="text-xs text-sand-200/60 mt-1">Authentic Indian Fine-Casual Dining • Hyderabad & Vijayawada</p>
+            </div>
+            <div class="flex items-center gap-6 text-sm">
+                <a href="#menu" class="hover:text-saffron-400 transition-colors">Menu</a>
+                <a href="#offers" class="hover:text-saffron-400 transition-colors">Offers</a>
+                <a href="#reviews" class="hover:text-saffron-400 transition-colors">Reviews</a>
+                <button onclick="openReservationModal()" class="hover:text-saffron-400 transition-colors">Reservations</button>
+            </div>
+            <p class="text-xs text-sand-200/50">© 2026 Deccan Spice & Grill Hospitality Pvt. Ltd. All prices in ₹ (INR).</p>
+        </div>
+    </footer>
+
+    <!-- ===================================================================== -->
+    <!-- INTERACTIVE ORDER TRAY SLIDE-OVER DRAWER                              -->
+    <!-- ===================================================================== -->
+    <div id="cart-drawer-backdrop" onclick="toggleCartDrawer()" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden transition-opacity"></div>
+    <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <!-- Drawer Header -->
+        <div class="px-6 py-5 bg-charcoal-950 text-white flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-bag-shopping text-saffron-400 text-lg"></i>
+                <h3 class="font-serif text-xl font-bold">Your Dining Tray</h3>
+            </div>
+            <button onclick="toggleCartDrawer()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items Scroll Area -->
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- Dynamically rendered cart items -->
+        </div>
+
+        <!-- Promo Code & Totals Footer -->
+        <div class="p-6 bg-sand-50 border-t border-sand-200 space-y-4">
+            <!-- Promo Input -->
+            <div class="flex gap-2">
+                <input type="text" id="tray-promo-input" placeholder="Promo code (e.g., DECCAN20)" class="flex-1 px-3.5 py-2.5 rounded-xl bg-white border border-sand-200 text-xs font-mono uppercase focus:outline-none focus:border-saffron-500">
+                <button onclick="applyTrayPromo()" class="px-4 py-2.5 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white text-xs font-semibold transition-colors">
+                    Apply
+                </button>
+            </div>
+
+            <!-- Bill Summary -->
+            <div class="space-y-1.5 text-sm">
+                <div class="flex justify-between text-charcoal-800/75">
+                    <span>Item Subtotal</span>
+                    <span id="tray-subtotal">₹0</span>
+                </div>
+                <div id="tray-discount-row" class="hidden flex justify-between text-emerald-600 font-medium">
+                    <span>Promo Discount (<span id="applied-promo-label"></span>)</span>
+                    <span id="tray-discount">-₹0</span>
+                </div>
+                <div class="flex justify-between text-charcoal-800/75">
+                    <span>GST (5%)</span>
+                    <span id="tray-gst">₹0</span>
+                </div>
+                <div class="flex justify-between text-base font-bold text-charcoal-950 pt-2 border-t border-sand-200">
+                    <span>Grand Total</span>
+                    <span id="tray-total" class="text-terracotta-600">₹0</span>
+                </div>
+            </div>
+
+            <button onclick="placeSampleOrder()" id="checkout-btn" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-saffron-500 to-terracotta-600 hover:from-saffron-400 hover:to-terracotta-500 text-white font-bold text-sm shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                Place Takeaway / Table Order
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================================================================== -->
+    <!-- TABLE RESERVATION MODAL                                               -->
+    <!-- ===================================================================== -->
+    <div id="reservation-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+        <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-sand-200 animate-[fadeIn_0.2s_ease-out]">
+            <div class="bg-charcoal-950 px-6 py-5 text-white flex items-center justify-between">
+                <div>
+                    <span class="text-[11px] uppercase tracking-widest text-saffron-400 font-semibold">Priority Seating</span>
+                    <h3 class="font-serif text-2xl font-bold">Reserve Your Table</h3>
+                </div>
+                <button onclick="closeReservationModal()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <form id="modal-booking-form" onsubmit="handleBookingSubmit(event, 'modal')" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1">Guest Name *</label>
+                            <input type="text" name="guestName" required placeholder="Rohan Deshmukh" class="w-full px-3.5 py-2.5 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1">Phone Number *</label>
+                            <input type="tel" name="guestPhone" required placeholder="+91 98490 XXXXX" class="w-full px-3.5 py-2.5 rounded-xl bg-sand-50 border border-sand-200 text-sm focus:outline-none focus:border-saffron-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1">Branch</label>
+                            <select name="branch" class="w-full px-3 py-2.5 rounded-xl bg-sand-50 border border-sand-200 text-sm">
+                                <option value="Hyderabad - Banjara Hills">Hyderabad</option>
+                                <option value="Vijayawada - MG Road">Vijayawada</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1">Date *</label>
+                            <input type="date" name="date" required class="booking-date-input w-full px-3 py-2.5 rounded-xl bg-sand-50 border border-sand-200 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1">Guests</label>
+                            <select name="guests" class="w-full px-3 py-2.5 rounded-xl bg-sand-50 border border-sand-200 text-sm">
+                                <option value="2 Guests">2 Guests</option>
+                                <option value="4 Guests" selected>4 Guests</option>
+                                <option value="6 Guests">6 Guests</option>
+                                <option value="8+ Guests">8+ Guests</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1">Dinner / Lunch Slot</label>
+                        <select name="timeSlot" class="w-full px-3.5 py-2.5 rounded-xl bg-sand-50 border border-sand-200 text-sm">
+                            <option value="12:30 PM (Lunch)">12:30 PM (Lunch)</option>
+                            <option value="1:45 PM (Lunch)">1:45 PM (Lunch)</option>
+                            <option value="7:30 PM (Dinner)" selected>7:30 PM (Dinner)</option>
+                            <option value="8:45 PM (Dinner)">8:45 PM (Dinner)</option>
+                            <option value="9:45 PM (Late Dinner)">9:45 PM (Late Dinner)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-charcoal-800 mb-1">Occasion / Dietary Notes</label>
+                        <input type="text" name="notes" placeholder="Anniversary, window booth, less spicy..." class="w-full px-3.5 py-2.5 rounded-xl bg-sand-50 border border-sand-200 text-sm">
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-saffron-500 to-terracotta-600 hover:from-saffron-400 hover:to-terracotta-500 text-white font-bold text-sm shadow-lg transition-all">
+                        Complete Reservation
+                    </button>
+                </form>
+
+                <!-- Modal Confirmation Screen -->
+                <div id="modal-booking-confirmation" class="hidden text-center py-4 space-y-4">
+                    <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-2xl">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h4 class="font-serif text-2xl font-bold text-charcoal-900">Your Table Awaits!</h4>
+                    <p id="modal-confirmation-text" class="text-sm text-charcoal-800/80 leading-relaxed"></p>
+                    <button onclick="closeReservationModal()" class="px-6 py-2.5 rounded-xl bg-charcoal-900 text-white text-sm font-semibold">
+                        Done
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- VANILLA JAVASCRIPT APPLICATION LOGIC                                  -->
+    <!-- ===================================================================== -->
+    <script>
+        // 1. AUTHENTIC INDIAN CULINARY DATASET (INR Pricing)
+        const menuItems = [
+            {
+                id: 1,
+                name: "Bhatti Da Paneer Tikka",
+                category: "Starters",
+                isVeg: true,
+                price: 345,
+                spice: "Medium",
+                tag: "Chef's Special",
+                description: "Charcoal-roasted malai cottage cheese marinated in hung curd, roasted gram flour, Kashmiri chilli & crushed black cardamom."
+            },
+            {
+                id: 2,
+                name: "Guntur Kodi Vepudu",
+                category: "Starters",
+                isVeg: false,
+                price: 395,
+                spice: "Fiery",
+                tag: "Andhra Classic",
+                description: "Wok-tossed boneless chicken morsels seared with sun-dried Guntur red chillies, crisp curry leaves, and roasted coriander."
+            },
+            {
+                id: 3,
+                name: "Subz Shikampuri Kebab",
+                category: "Starters",
+                isVeg: true,
+                price: 315,
+                spice: "Mild",
+                tag: "Hyderabadi Heritage",
+                description: "Pan-seared lentil and garden vegetable patties stuffed with spiced hung yogurt, mint, and caramelized onions."
+            },
+            {
+                id: 4,
+                name: "Tandoori Murgh Angara",
+                category: "Starters",
+                isVeg: false,
+                price: 425,
+                spice: "Spicy",
+                tag: "Bestseller",
+                description: "Half spring chicken marinated overnight in smoked paprika, mustard oil, and hand-pounded garam masala, roasted over live embers."
+            },
+            {
+                id: 5,
+                name: "Dal-e-Deccan (24-Hr Black Lentils)",
+                category: "Main Course",
+                isVeg: true,
+                price: 365,
+                spice: "Mild",
+                tag: "Signature",
+                description: "Whole urad lentils slow-simmered overnight over dying charcoal embers, finished with white butter, ginger juliennes & cream."
+            },
+            {
+                id: 6,
+                name: "Paneer Lababdar Nizami",
+                category: "Main Course",
+                isVeg: true,
+                price: 385,
+                spice: "Medium",
+                tag: "Popular",
+                description: "Velvety tomato-cashew gravy enriched with grated paneer, kasuri methi, and warm roasted cumin."
+            },
+            {
+                id: 7,
+                name: "Nalli Nihari Gosht",
+                category: "Main Course",
+                isVeg: false,
+                price: 565,
+                spice: "Medium",
+                tag: "Royal Reserve",
+                description: "Slow-braised lamb shanks cooked for six hours in a fragrant potli spice broth, garnished with saffron, ginger & fresh lime."
+            },
+            {
+                id: 8,
+                name: "Butter Chicken Old Delhi Style",
+                category: "Main Course",
+                isVeg: false,
+                price: 465,
+                spice: "Mild",
+                tag: "Crowd Favourite",
+                description: "Tandoor-charred chicken tikka simmered in a rich, smoky heirloom tomato makhani sauce with fenugreek."
+            },
+            {
+                id: 9,
+                name: "Nizam's Zafrani Dum Biryani",
+                category: "Biryani & Breads",
+                isVeg: false,
+                price: 549,
+                spice: "Medium",
+                tag: "Must Try",
+                description: "Aged long-grain basmati layered with saffron-infused tender meat, mint, and birista, sealed with dough and cooked on dum. Served with mirchi ka salan."
+            },
+            {
+                id: 10,
+                name: "Subz Kathal Dum Biryani",
+                category: "Biryani & Breads",
+                isVeg: true,
+                price: 449,
+                spice: "Medium",
+                tag: "Chef's Pick",
+                description: "Tender jackfruit and seasonal vegetables slow-cooked with rose water, saffron milk, and fragrant Deccan spices."
+            },
+            {
+                id: 11,
+                name: "Assorted Tandoori Roti & Naan Basket",
+                category: "Biryani & Breads",
+                isVeg: true,
+                price: 215,
+                spice: "Mild",
+                tag: "4 Pieces",
+                description: "Includes 1 Butter Naan, 1 Garlic Coriander Naan, 1 Lachha Paratha, and 1 Whole Wheat Tandoori Roti."
+            },
+            {
+                id: 12,
+                name: "Shahi Double Ka Meetha & Rabri",
+                category: "Desserts & Beverages",
+                isVeg: true,
+                price: 225,
+                spice: "Mild",
+                tag: "Hyderabadi Sweet",
+                description: "Ghee-toasted brioche soaked in cardamom-saffron syrup, topped with reduced thickened milk rabri and roasted pistachios."
+            },
+            {
+                id: 13,
+                name: "Smoked Kokum & Curry Leaf Fizz",
+                category: "Desserts & Beverages",
+                isVeg: true,
+                price: 165,
+                spice: "Mild",
+                tag: "Refreshing",
+                description: "Coastal Konkan kokum reduction muddled with fresh curry leaves, roasted cumin salt, and sparkling soda."
+            }
+        ];
+
+        // 2. BRANCH LOCATION DATA (Hyderabad & Vijayawada)
+        const branches = {
+            hyderabad: {
+                title: "Deccan Spice & Grill — Banjara Hills",
+                address: "Plot 42, Road No. 12, Near KBR Park, Banjara Hills, Hyderabad, Telangana 500034",
+                hours: "Mon – Sun: 12:00 PM – 3:30 PM & 7:00 PM – 11:30 PM",
+                phoneDisplay: "+91 40 2355 8899",
+                phoneHref: "tel:+914023558899",
+                landmark: "Road No. 12, Banjara Hills"
+            },
+            vijayawada: {
+                title: "Deccan Spice & Grill — MG Road",
+                address: "3rd Floor, Pinnamaneni Polyclinic Junction, Bandar (MG) Road, Vijayawada, Andhra Pradesh 520010",
+                hours: "Mon – Sun: 12:00 PM – 3:30 PM & 6:45 PM – 11:00 PM",
+                phoneDisplay: "+91 866 247 9900",
+                phoneHref: "tel:+918662479900",
+                landmark: "MG Road, Vijayawada"
+            }
+        };
+
+        // 3. INITIAL CUSTOMER REVIEWS
+        let reviewsData = [
+            {
+                name: "Karthik Subramanian",
+                dish: "Nizam's Zafrani Dum Biryani",
+                rating: 5,
+                date: "2 days ago",
+                comment: "Hands down the most aromatic dum biryani in Banjara Hills! The meat fell right off the bone and the mirchi ka salan had authentic roasted peanut depth."
+            },
+            {
+                name: "Dr. Meenakshi Chowdary",
+                dish: "Bhatti Da Paneer Tikka & Dal-e-Deccan",
+                rating: 5,
+                date: "1 week ago",
+                comment: "As a vegetarian family, we deeply appreciate their separate veg prep and smoky tandoor starters. The Dal-e-Deccan tastes like it simmered all night!"
+            },
+            {
+                name: "Siddharth & Priya Malhotra",
+                dish: "Guntur Kodi Vepudu",
+                rating: 5,
+                date: "2 weeks ago",
+                comment: "Visited the Vijayawada MG Road outlet for our anniversary dinner. Warm lighting, attentive staff, and fiery Guntur chicken that hits all the right notes."
+            },
+            {
+                name: "Farhan Ahmed",
+                dish: "Nalli Nihari & Garlic Naan",
+                rating: 4,
+                date: "3 weeks ago",
+                comment: "Rich, soulful Nihari with zero artificial colours. Pair it with their crisp lachha paratha and finish with the Double Ka Meetha."
+            }
+        ];
+
+        // APPLICATION STATE
+        let selectedCategory = "All";
+        let cart = [
+            { ...menuItems[0], qty: 1 }, // Pre-populate 1 signature starter so user sees how tray works immediately
+        ];
+        let appliedPromo = null;
+
+        // =====================================================================
+        // RENDER MENU CARDS
+        // =====================================================================
+        function getSpiceBadgeStyle(spice) {
+            switch (spice) {
+                case "Fiery": return "bg-red-100 text-red-700 border-red-200";
+                case "Spicy": return "bg-orange-100 text-orange-700 border-orange-200";
+                case "Medium": return "bg-amber-100 text-amber-800 border-amber-200";
+                default: return "bg-emerald-50 text-emerald-700 border-emerald-200";
+            }
+        }
+
+        function renderMenu() {
+            const grid = document.getElementById("menu-grid");
+            const vegOnly = document.getElementById("veg-only-toggle").checked;
+            const searchQuery = document.getElementById("menu-search").value.trim().toLowerCase();
+
+            const filtered = menuItems.filter(item => {
+                const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
+                const matchesVeg = !vegOnly || item.isVeg;
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery) ||
+                                      item.description.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesVeg && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 bg-white rounded-3xl border border-sand-200">
+                        <i class="fa-solid fa-bowl-rice text-3xl text-sand-200 mb-3"></i>
+                        <h3 class="font-serif text-xl font-bold text-charcoal-900">No matching dishes found</h3>
+                        <p class="text-sm text-charcoal-800/70 mt-1">Try clearing your search filter or switching categories.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => {
+                const inCart = cart.find(c => c.id === item.id);
+                return `
+                    <article class="bg-white rounded-3xl p-6 border border-sand-200 shadow-sm hover:shadow-xl hover:border-saffron-400/50 transition-all flex flex-col justify-between group">
+                        <div>
+                            <!-- Top Meta Row: Veg/Non-Veg FSSAI Icon + Tag + Spice Badge -->
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <div class="flex items-center gap-2">
+                                    <!-- Indian FSSAI Standard Veg / Non-Veg Symbol -->
+                                    <span title="${item.isVeg ? 'Vegetarian' : 'Non-Vegetarian'}" class="w-4 h-4 border ${item.isVeg ? 'border-emerald-600' : 'border-red-600'} flex items-center justify-center rounded-xs shrink-0">
+                                        <span class="w-2 h-2 rounded-full ${item.isVeg ? 'bg-emerald-600' : 'bg-red-600'}"></span>
+                                    </span>
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-saffron-700 bg-saffron-100 px-2.5 py-0.5 rounded-full">
+                                        ${item.tag}
+                                    </span>
+                                </div>
+                                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${getSpiceBadgeStyle(item.spice)}">
+                                    <i class="fa-solid fa-pepper-hot mr-1 text-[10px]"></i>${item.spice}
+                                </span>
+                            </div>
+
+                            <!-- Dish Title & Category -->
+                            <h3 class="font-serif text-xl font-bold text-charcoal-900 group-hover:text-terracotta-600 transition-colors">
+                                ${item.name}
+                            </h3>
+                            <p class="text-xs text-charcoal-800/55 font-medium mt-0.5">${item.category}</p>
+
+                            <!-- Description -->
+                            <p class="text-sm text-charcoal-800/80 mt-3 leading-relaxed">
+                                ${item.description}
+                            </p>
+                        </div>
+
+                        <!-- Bottom Row: INR Price & Interactive Add / Stepper Button -->
+                        <div class="mt-6 pt-4 border-t border-sand-100 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-charcoal-800/50 block">Price</span>
+                                <span class="text-xl font-bold text-charcoal-950">₹${item.price}</span>
+                            </div>
+
+                            ${inCart ? `
+                                <div class="flex items-center gap-3 bg-charcoal-900 text-white px-3 py-2 rounded-xl shadow-sm">
+                                    <button onclick="updateCartQty(${item.id}, -1)" aria-label="Decrease quantity" class="w-6 h-6 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center text-xs font-bold">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <span class="text-sm font-bold min-w-[16px] text-center">${inCart.qty}</span>
+                                    <button onclick="updateCartQty(${item.id}, 1)" aria-label="Increase quantity" class="w-6 h-6 rounded-lg bg-saffron-500 text-charcoal-950 hover:bg-saffron-400 flex items-center justify-center text-xs font-bold">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            ` : `
+                                <button onclick="addToCartById(${item.id})" class="px-4 py-2.5 rounded-xl bg-sand-100 hover:bg-charcoal-900 text-charcoal-900 hover:text-white font-semibold text-xs transition-all flex items-center gap-1.5">
+                                    <i class="fa-solid fa-plus"></i> Add to Tray
+                                </button>
+                            `}
+                        </div>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        // Category Tab Click Listeners
+        document.querySelectorAll(".category-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".category-btn").forEach(b => {
+                    b.classList.remove("bg-charcoal-900", "text-white");
+                    b.classList.add("bg-sand-100", "text-charcoal-800");
+                });
+                btn.classList.remove("bg-sand-100", "text-charcoal-800");
+                btn.classList.add("bg-charcoal-900", "text-white");
+                selectedCategory = btn.dataset.category;
+                renderMenu();
+            });
+        });
+
+        // =====================================================================
+        // ORDER TRAY / CART LOGIC
+        // =====================================================================
+        function addToCartById(id) {
+            const item = menuItems.find(m => m.id === id);
+            if (!item) return;
+            const existing = cart.find(c => c.id === id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...item, qty: 1 });
+            }
+            updateCartUI();
+            renderMenu();
+            showToast(`Added "${item.name}" to your tray`);
+        }
+
+        function updateCartQty(id, delta) {
+            const index = cart.findIndex(c => c.id === id);
+            if (index === -1) return;
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+            renderMenu();
+        }
+
+        function updateCartUI() {
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById("cart-badge").textContent = totalItems;
+
+            const container = document.getElementById("cart-items-container");
+            const checkoutBtn = document.getElementById("checkout-btn");
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16">
+                        <div class="w-16 h-16 rounded-full bg-sand-100 text-charcoal-800/40 flex items-center justify-center mx-auto mb-3 text-2xl">
+                            <i class="fa-solid fa-utensils"></i>
+                        </div>
+                        <p class="font-serif text-lg font-bold text-charcoal-900">Your tray is empty</p>
+                        <p class="text-xs text-charcoal-800/65 mt-1">Explore our menu and add kebabs, curries, or biryanis.</p>
+                    </div>
+                `;
+                checkoutBtn.disabled = true;
+            } else {
+                checkoutBtn.disabled = false;
+                container.innerHTML = cart.map(item => `
+                    <div class="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-sand-50 border border-sand-200">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3.5 h-3.5 border ${item.isVeg ? 'border-emerald-600' : 'border-red-600'} flex items-center justify-center rounded-xs shrink-0">
+                                    <span class="w-1.5 h-1.5 rounded-full ${item.isVeg ? 'bg-emerald-600' : 'bg-red-600'}"></span>
+                                </span>
+                                <h4 class="font-semibold text-sm text-charcoal-900">${item.name}</h4>
+                            </div>
+                            <p class="text-xs text-charcoal-800/65 mt-0.5">₹${item.price} × ${item.qty} = <strong class="text-charcoal-900">₹${item.price * item.qty}</strong></p>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white border border-sand-200 px-2.5 py-1.5 rounded-xl">
+                            <button onclick="updateCartQty(${item.id}, -1)" class="text-xs font-bold text-charcoal-800 hover:text-terracotta-600 px-1">-</button>
+                            <span class="text-xs font-bold min-w-[14px] text-center">${item.qty}</span>
+                            <button onclick="updateCartQty(${item.id}, 1)" class="text-xs font-bold text-charcoal-800 hover:text-terracotta-600 px-1">+</button>
+                        </div>
+                    </div>
+                `).join("");
+            }
+
+            // Calculate Totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let discount = 0;
+
+            if (appliedPromo && subtotal > 0) {
+                if (appliedPromo === "DECCAN20") {
+                    discount = Math.min(Math.round(subtotal * 0.20), 250);
+                } else if (appliedPromo === "FEAST550" && subtotal >= 1200) {
+                    discount = 550;
+                } else if (appliedPromo === "THALI349") {
+                    discount = 100;
+                }
+            }
+
+            const discountRow = document.getElementById("tray-discount-row");
+            if (discount > 0) {
+                discountRow.classList.remove("hidden");
+                document.getElementById("applied-promo-label").textContent = appliedPromo;
+                document.getElementById("tray-discount").textContent = `-₹${discount}`;
+            } else {
+                discountRow.classList.add("hidden");
+            }
+
+            const taxable = Math.max(subtotal - discount, 0);
+            const gst = Math.round(taxable * 0.05);
+            const grandTotal = taxable + gst;
+
+            document.getElementById("tray-subtotal").textContent = `₹${subtotal}`;
+            document.getElementById("tray-gst").textContent = `₹${gst}`;
+            document.getElementById("tray-total").textContent = `₹${grandTotal}`;
+        }
+
+        function applyTrayPromo() {
+            const input = document.getElementById("tray-promo-input").value.trim().toUpperCase();
+            const validCodes = ["DECCAN20", "FEAST550", "THALI349"];
+            if (validCodes.includes(input)) {
+                appliedPromo = input;
+                updateCartUI();
+                showToast(`Promo code "${input}" applied!`);
+            } else {
+                showToast("Invalid code. Try DECCAN20, FEAST550, or THALI349.", true);
+            }
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById("cart-drawer");
+            const backdrop = document.getElementById("cart-drawer-backdrop");
+            const isClosed = drawer.classList.contains("translate-x-full");
+            if (isClosed) {
+                drawer.classList.remove("translate-x-full");
+                backdrop.classList.remove("hidden");
+            } else {
+                drawer.classList.add("translate-x-full");
+                backdrop.classList.add("hidden");
+            }
+        }
+
+        function placeSampleOrder() {
+            const total = document.getElementById("tray-total").textContent;
+            cart = [];
+            appliedPromo = null;
+            document.getElementById("tray-promo-input").value = "";
+            updateCartUI();
+            renderMenu();
+            toggleCartDrawer();
+            showToast(`Order received (${total})! Our kitchen is firing up the tandoor.`);
+        }
+
+        // =====================================================================
+        // CLIPBOARD PROMO COPY (Using reliable execCommand fallback)
+        // =====================================================================
+        function copyPromoCode(code, btnElement) {
+            const tempInput = document.createElement("textarea");
+            tempInput.value = code;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand("copy");
+                // Also pre-fill into tray input for seamless UX
+                document.getElementById("tray-promo-input").value = code;
+                const span = btnElement.querySelector("span");
+                const originalText = span.textContent;
+                span.textContent = "Copied!";
+                showToast(`Copied "${code}" to clipboard!`);
+                setTimeout(() => {
+                    span.textContent = originalText;
+                }, 2000);
+            } catch (err) {
+                showToast("Code: " + code);
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        // =====================================================================
+        // CUSTOMER REVIEWS & DYNAMIC SUBMISSION
+        // =====================================================================
+        function renderReviews() {
+            const container = document.getElementById("reviews-list");
+            container.innerHTML = reviewsData.map(rev => {
+                const stars = "★".repeat(rev.rating) + "☆".repeat(5 - rev.rating);
+                const initials = rev.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
+                return `
+                    <div class="bg-white rounded-3xl p-6 border border-sand-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="text-saffron-500 text-base tracking-wider">${stars}</div>
+                                <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
+                                    <i class="fa-solid fa-circle-check mr-1"></i>Verified Diner
+                                </span>
+                            </div>
+                            <p class="text-sm text-charcoal-800/85 italic leading-relaxed">"${rev.comment}"</p>
+                        </div>
+
+                        <div class="mt-5 pt-4 border-t border-sand-100 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-charcoal-900 text-saffron-400 font-bold text-xs flex items-center justify-center">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-charcoal-900">${rev.name}</h4>
+                                    <p class="text-[11px] text-terracotta-600 font-medium">Ordered: ${rev.dish}</p>
+                                </div>
+                            </div>
+                            <span class="text-[11px] text-charcoal-800/50">${rev.date}</span>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function setRating(val) {
+            document.getElementById("reviewer-rating").value = val;
+            document.querySelectorAll(".star-btn").forEach(btn => {
+                const starNum = parseInt(btn.dataset.star, 10);
+                btn.textContent = starNum <= val ? "★" : "☆";
+            });
+        }
+
+        function handleReviewSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById("reviewer-name").value.trim();
+            const dish = document.getElementById("reviewer-dish").value.trim();
+            const rating = parseInt(document.getElementById("reviewer-rating").value, 10);
+            const comment = document.getElementById("reviewer-comment").value.trim();
+
+            if (!name || !dish || !comment) return;
+
+            reviewsData.unshift({
+                name,
+                dish,
+                rating,
+                date: "Just now",
+                comment
+            });
+
+            renderReviews();
+            e.target.reset();
+            setRating(5);
+            showToast("Thank you! Your review has been published.");
+        }
+
+        // =====================================================================
+        // BRANCH SWITCHER & TABLE RESERVATION HANDLERS
+        // =====================================================================
+        function switchBranch(key) {
+            const data = branches[key];
+            if (!data) return;
+
+            const btnHyd = document.getElementById("tab-hyderabad");
+            const btnVja = document.getElementById("tab-vijayawada");
+
+            if (key === "hyderabad") {
+                btnHyd.classList.add("bg-charcoal-900", "text-white");
+                btnHyd.classList.remove("text-charcoal-800");
+                btnVja.classList.remove("bg-charcoal-900", "text-white");
+                btnVja.classList.add("text-charcoal-800");
+            } else {
+                btnVja.classList.add("bg-charcoal-900", "text-white");
+                btnVja.classList.remove("text-charcoal-800");
+                btnHyd.classList.remove("bg-charcoal-900", "text-white");
+                btnHyd.classList.add("text-charcoal-800");
+            }
+
+            document.getElementById("branch-details").innerHTML = `
+                <h3 class="font-serif text-xl font-bold text-charcoal-900">${data.title}</h3>
+                <div class="flex items-start gap-3 text-sm text-charcoal-800/80">
+                    <i class="fa-solid fa-location-dot text-terracotta-600 mt-1"></i>
+                    <p>${data.address}</p>
+                </div>
+                <div class="flex items-start gap-3 text-sm text-charcoal-800/80">
+                    <i class="fa-regular fa-clock text-saffron-600 mt-1"></i>
+                    <p>${data.hours}</p>
+                </div>
+            `;
+
+            document.getElementById("branch-phone-link").href = data.phoneHref;
+            document.getElementById("branch-phone-text").textContent = data.phoneDisplay;
+            document.getElementById("map-landmark-badge").textContent = data.landmark;
+            document.getElementById("map-pin-title").textContent = data.title;
+        }
+
+        function openReservationModal() {
+            const modal = document.getElementById("reservation-modal");
+            document.getElementById("modal-booking-form").classList.remove("hidden");
+            document.getElementById("modal-booking-confirmation").classList.add("hidden");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeReservationModal() {
+            const modal = document.getElementById("reservation-modal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+
+        function handleBookingSubmit(e, source) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const guestName = formData.get("guestName");
+            const branch = formData.get("branch");
+            const date = formData.get("date");
+            const guests = formData.get("guests");
+            const timeSlot = formData.get("timeSlot");
+            const refCode = "DSG-" + Math.floor(1000 + Math.random() * 9000);
+
+            const summaryMsg = `Namaste ${guestName}! Your table for ${guests} at ${branch} on ${date} at ${timeSlot} is confirmed. Booking Ref: #${refCode}.`;
+
+            if (source === "inline") {
+                const box = document.getElementById("inline-booking-confirmation");
+                document.getElementById("inline-confirmation-text").textContent = summaryMsg;
+                box.classList.remove("hidden");
+                e.target.reset();
+                setDefaultBookingDates();
+            } else {
+                document.getElementById("modal-booking-form").classList.add("hidden");
+                const modalConfirm = document.getElementById("modal-booking-confirmation");
+                document.getElementById("modal-confirmation-text").textContent = summaryMsg;
+                modalConfirm.classList.remove("hidden");
+                e.target.reset();
+                setDefaultBookingDates();
+            }
+            showToast(`Reservation #${refCode} confirmed!`);
+        }
+
+        // =====================================================================
+        // UTILITIES: MOBILE MENU, TOASTS & DEFAULT DATES
+        // =====================================================================
+        function toggleMobileMenu() {
+            document.getElementById("mobile-menu").classList.toggle("hidden");
+        }
+
+        function showToast(message, isError = false) {
+            const container = document.getElementById("toast-container");
+            const toast = document.createElement("div");
+            toast.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl text-xs sm:text-sm font-medium flex items-center gap-2.5 text-white transition-all transform translate-y-2 opacity-0 ${isError ? 'bg-terracotta-700' : 'bg-charcoal-900 border border-saffron-500/30'}`;
+            toast.innerHTML = `
+                <i class="fa-solid ${isError ? 'fa-circle-exclamation text-saffron-300' : 'fa-circle-check text-saffron-400'}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            requestAnimationFrame(() => {
+                toast.classList.remove("translate-y-2", "opacity-0");
+            });
+            setTimeout(() => {
+                toast.classList.add("opacity-0", "translate-y-2");
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        function setDefaultBookingDates() {
+            const today = new Date().toISOString().split("T")[0];
+            document.querySelectorAll(".booking-date-input").forEach(input => {
+                input.min = today;
+                if (!input.value) input.value = today;
+            });
+        }
+
+        // INITIALIZE ON LOAD
+        window.addEventListener("DOMContentLoaded", () => {
+            renderMenu();
+            updateCartUI();
+            renderReviews();
+            switchBranch("hyderabad");
+            setDefaultBookingDates();
+        });
+    </script>
+</body>
+</html>
